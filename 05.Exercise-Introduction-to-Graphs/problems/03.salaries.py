@@ -1,0 +1,43 @@
+# 3. Salaries
+def read_graph(nodes, graph):
+    for _ in range(nodes):
+        line = input()
+        children = []
+
+        for index, state in enumerate(line):
+            if state == 'Y':
+                children.append(index)
+        graph.append(children)
+    return graph
+
+
+def dfs(node, graph, salaries):
+    if salaries[node] is not None:
+        return salaries[node]
+
+    if len(graph[node]) == 0:
+        salaries[node] = 1
+        return 1
+
+    salary = 0
+    for child in graph[node]:
+        salary += dfs(child, graph, salaries)
+
+    salaries[node] = salary
+    return salary
+
+
+
+nodes = int(input())
+graph = []
+
+graph = read_graph(nodes, graph)
+
+salaries = [None] * nodes
+result = 0
+
+for node in range(nodes):
+    salary = dfs(node, graph, salaries)
+    result += salary
+
+print(result)
